@@ -30,9 +30,16 @@ app.post("/contact", (req, res) => {
       return res.status(400).json({ msg: errors, success: false });
     }
 
+        // Get current date and time
+        const currentDate = new Date();
+        const submission_date = currentDate.toISOString().split('T')[0];
+        const submission_time = currentDate.toTimeString().split(' ')[0];
+        console.log('Formatted Submission Date:', submission_date);
+        console.log('Formatted Submission Time:', submission_time);
+
     // Insert into MySQL
-    const query = 'INSERT INTO contact (fullname, email, message) VALUES (?, ?, ?)';
-    sqlconnection.query(query, [fullname, email, message], (err, result) => {
+    const query = 'INSERT INTO contact (fullname, email, message,	 submission_date, submission_time) VALUES (?, ?, ?,?,?)';
+    sqlconnection.query(query, [fullname, email, message, submission_date, submission_time], (err, result) => {
       if (err) {
         console.error('Database error:', err);
         return res.status(500).json({ msg: ['Database error'], success: false });
